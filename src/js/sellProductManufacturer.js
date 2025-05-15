@@ -7,17 +7,19 @@ App = {
         return await App.initWeb3();
     },
 
-    initWeb3: function() {
-        if(window.web3) {
-            App.web3Provider=window.web3.currentProvider;
+    initWeb3: async function () {
+        if (window.ethereum) {
+            App.web3Provider = window.ethereum;
+            web3 = new Web3(window.ethereum);
+            await window.ethereum.request({ method: "eth_requestAccounts" });
         } else {
-            App.web3Provider=new Web3.proviers.HttpProvider('http://localhost:7545');
+            alert("Please install MetaMask!");
+            return;
         }
-
-        web3 = new Web3(App.web3Provider);
+    
         return App.initContract();
     },
-
+    
     initContract: function() {
 
         $.getJSON('product.json',function(data){
